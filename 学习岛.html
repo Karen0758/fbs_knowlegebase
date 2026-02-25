@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习岛屿 - 认知底座与终身迭代</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg-page: #F4F3EF;     
+            --text-main: #2A2C2B;   
+            --text-muted: #797C7A;  
+            --theme-color: #A66E5B; 
+            --theme-light: rgba(166, 110, 91, 0.08);
+            --border-color: #DCD9D0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Noto Serif SC', serif; font-weight: 600; }
+
+        /* --- 极简导航 --- */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            padding: 20px 5vw; display: flex;
+            justify-content: space-between; align-items: center;
+            background: rgba(244, 243, 239, 0.85);
+            backdrop-filter: blur(8px); z-index: 100;
+        }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 1rem; font-weight: 700; letter-spacing: 2px; }
+        .back-btn {
+            font-size: 0.9rem; color: var(--text-muted); text-decoration: none;
+            transition: color 0.3s; display: flex; align-items: center; gap: 5px;
+        }
+        .back-btn:hover { color: var(--theme-color); }
+
+        /* --- 封面区块 --- */
+        header {
+            padding: 180px 10vw 100px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+        .hero-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem; color: var(--theme-color);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 20px; display: block;
+        }
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.2; margin-bottom: 30px;
+            max-width: 900px; color: var(--text-main);
+        }
+        .hero-desc {
+            font-size: 1.1rem; color: var(--text-muted);
+            max-width: 700px; line-height: 1.8;
+            border-left: 2px solid var(--theme-color);
+            padding-left: 20px; margin-top: 40px;
+        }
+
+        .decor-circle {
+            position: absolute; top: 100px; right: 10vw;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            border: 2px solid var(--theme-color);
+            opacity: 0.15;
+        }
+        .decor-circle::after {
+            content: ''; position: absolute; top: -15px; left: 15px;
+            width: 100%; height: 100%; border-radius: 50%;
+            border: 1px dashed var(--theme-color);
+        }
+
+        /* --- 第一部分：教育时间轴 --- */
+        .section-container { padding: 100px 10vw; border-bottom: 1px solid var(--border-color); }
+        .section-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 60px;
+        }
+        .section-title { font-size: 2rem; position: relative; }
+        .section-desc { color: var(--text-muted); font-size: 0.95rem; max-width: 400px; text-align: right;}
+
+        .timeline { position: relative; max-width: 1000px; margin: 0 auto; }
+        .timeline::before {
+            content: ''; position: absolute; left: 160px; top: 0;
+            bottom: 0; width: 1px; background-color: var(--border-color);
+        }
+
+        .tl-item {
+            position: relative; display: flex;
+            margin-bottom: 50px; opacity: 0.9;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .tl-item:hover { opacity: 1; transform: translateX(5px); }
+        .tl-item:last-child { margin-bottom: 0; }
+
+        .tl-date {
+            width: 160px; padding-right: 30px; text-align: right;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: var(--text-muted); padding-top: 6px;
+        }
+        
+        .tl-dot {
+            position: absolute; left: 156.5px; top: 10px;
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: var(--bg-page); border: 2px solid var(--theme-color);
+            transition: background 0.3s;
+        }
+        .tl-item:hover .tl-dot { background-color: var(--theme-color); }
+
+        .tl-content { padding-left: 40px; flex: 1; }
+        .tl-inst { font-size: 1.2rem; font-family: 'Noto Serif SC', serif; color: var(--text-main); margin-bottom: 4px; }
+        .tl-role {
+            display: inline-block; font-size: 0.8rem; font-weight: 500;
+            background: var(--theme-light); color: var(--theme-color);
+            padding: 2px 8px; border-radius: 4px; margin-bottom: 12px;
+        }
+        .tl-summary { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; max-width: 650px; }
+
+        /* --- 第二部分：学术训练与思维转化 --- */
+        .philosophy-grid { display: flex; flex-direction: column; gap: 80px; max-width: 1000px; margin: 0 auto; }
+        
+        .phil-item {
+            display: grid; grid-template-columns: 1fr 1.8fr; gap: 50px;
+            align-items: flex-start;
+        }
+        .phil-item:nth-child(even) { grid-template-columns: 1.8fr 1fr; }
+        .phil-item:nth-child(even) .phil-visual { order: 2; text-align: right; }
+        .phil-item:nth-child(even) .phil-text { order: 1; }
+
+        .phil-number {
+            font-size: 4.5rem; font-family: 'Noto Serif SC', serif;
+            color: transparent; -webkit-text-stroke: 1px var(--border-color);
+            line-height: 1; margin-bottom: 15px; transition: -webkit-text-stroke 0.3s;
+        }
+        .phil-item:hover .phil-number { -webkit-text-stroke: 1px var(--theme-color); }
+
+        .phil-title { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-main); }
+        .phil-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 25px; }
+        
+        .phil-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .phil-tag {
+            font-size: 0.8rem; font-weight: 600; font-family: 'Noto Sans SC', sans-serif;
+            color: var(--theme-color); background-color: #fff; border: 1px solid var(--border-color);
+            padding: 4px 12px; border-radius: 20px;
+        }
+
+        /* --- 第三部分：终身学习/线上课程库 --- */
+        .course-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px; max-width: 1100px; margin: 0 auto;
+        }
+
+        .course-card {
+            background-color: #fff; border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex; flex-direction: column; height: 100%;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            border-color: var(--theme-color);
+        }
+
+        .course-meta {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px;
+        }
+        .course-platform {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            color: var(--theme-color); font-weight: 600; text-transform: uppercase;
+        }
+        .course-status {
+            font-size: 0.75rem; background: var(--bg-page); color: var(--text-muted);
+            padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-color);
+        }
+        .course-status.completed { background: var(--theme-light); color: var(--theme-color); border: none; }
+
+        .course-title { font-size: 1.15rem; margin-bottom: 15px; color: var(--text-main); line-height: 1.4; }
+        .course-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; flex-grow: 1; }
+        
+        .course-skills {
+            margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-color);
+            font-size: 0.8rem; color: var(--text-light);
+        }
+
+        /* 学习分类列表样式 */
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .learning-category {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 12px -4px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .learning-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px -6px rgba(91, 108, 122, 0.12);
+        }
+
+        .category-title {
+            font-size: 1rem;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-image {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--bg-page);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-list {
+            list-style: none;
+            width: 100%;
+        }
+
+        .category-list li {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 15px;
+            text-align: left;
+        }
+
+        .category-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--theme-color);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* --- 响应式 --- */
+        @media (max-width: 768px) {
+            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .section-desc { text-align: left; }
+            
+            .timeline::before { left: 20px; }
+            .tl-item { flex-direction: column; }
+            .tl-date { width: 100%; text-align: left; padding-left: 40px; padding-bottom: 10px; }
+            .tl-dot { left: 16px; top: 8px; }
+
+            .phil-item, .phil-item:nth-child(even) { grid-template-columns: 1fr; gap: 20px; }
+            .phil-item:nth-child(even) .phil-visual { order: 1; text-align: left; }
+            .phil-item:nth-child(even) .phil-text { order: 2; }
+            .phil-item:nth-child(even) .phil-tags { justify-content: flex-start; }
+
+            .learning-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .learning-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .learning-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 学习卡片详情模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: var(--text-main);
+        }
+
+        .modal-header {
+            padding: 20px 20px 0;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-image-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        .prev-btn:hover, .next-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .image-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.2);
+        }
+
+        .image-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        .modal-list {
+            list-style: none;
+        }
+
+        .modal-list li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .modal-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--theme-color);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* 学习分类卡片鼠标指针 */
+        .learning-category {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航 -->
+    <nav>
+        <div class="nav-left">
+            <span class="logo">STUDY ISLAND</span>
+        </div>
+        <a href="index.html" class="back-btn">← 返回全景地图</a>
+    </nav>
+
+
+    </header>
+
+    <!-- 模块一：教育背景时间轴 -->
+    <section class="section-container">
+        <div class="section-header">
+            <h2 class="section-title">教育背景</h2>
+            <p class="section-desc">
+        </div>
+
+        <div class="timeline">
+            <!-- 硕士阶段 -->
+            <div class="tl-item">
+                <div class="tl-date">2022.09 - 2024.07</div>
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                    <h4 class="tl-inst">中国社会科学院大学</h4>
+                    <span class="tl-role">社会工作 / 硕士学位</span>
+                    <p class="tl-summary">毕业论文：</p>
+                </div>
+            </div>
+
+            <!-- 本科阶段 -->
+            <div class="tl-item">
+                <div class="tl-date">2017.09 - 2021.07</div>
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                    <h4 class="tl-inst">上海大学</h4>
+                    <span class="tl-role">法学 / 学士学位</span>
+                    <p class="tl-summary">毕业论文：精神卫生法中监护人的地位</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 模块三：工作后的终身学习项目 -->
+    <section class="section-container">
+        <div class="section-header" style="margin-bottom: 40px;">
+            <h2 class="section-title">继续教育</h2>
+        </div>
+
+        <div class="learning-grid">
+            <!-- 学习进阶 -->
+            <div class="learning-category">
+                <h3 class="category-title">工具学习</h3>
+                <div class="category-image">
+                    <img src="images/guard.png">
+                </div>
+                <ul class="category-list">
+                    <li>CircleCat CSC101 — Python 编程基础：掌握数据处理与自动化基础</li>
+                    <li>Tableau 课程：学会结构化导出数据与清洗</li>
+                    <li>WordPress 建站：独立搭建并维护个人项目站点</li>
+                    <li>AI 图文创作、工作流搭建、网页搭建</li>
+                </ul>
+            </div>
+
+            <!-- 咨询 / 公益课程 -->
+            <div class="learning-category">
+                <h3 class="category-title">公益领域积累</h3>
+                <div class="category-image">
+                    <img src="images/meal.png">
+                </div>
+                <ul class="category-list">
+                    <li>CDR资助之道训练营</li>
+                    <li>PMD监测评估实训营</li>
+                    <li>救助儿童会青年创新创业实验室</li>
+                    <li>三一基金会科学公益通识课程第6辑：慈善的精进</li>
+                </ul>
+            </div>
+
+            <!-- 内容与表达 -->
+            <div class="learning-category">
+                <h3 class="category-title">内容与表达</h3>
+                <div class="category-image">
+                    <img src="images/myself2.jpg">
+                </div>
+                <ul class="category-list">
+                    <li>资助工作者共写营</li>
+                    <li>心声伙伴Mind Fellow精神健康亲历者协力营</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习卡片详情模态框 -->
+    <div id="learning-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn">&times;</button>
+            <div class="modal-header">
+                <h3 id="modal-title" class="modal-title"></h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <button class="prev-btn">&lt;</button>
+                    <div class="modal-image">
+                        <img id="modal-image" src="" alt="">
+                    </div>
+                    <button class="next-btn">&gt;</button>
+                    <div class="image-indicators"></div>
+                    <div class="image-count"></div>
+                </div>
+                <ul id="modal-list" class="modal-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 学习分类数据
+        const learningData = {
+            category1: {
+                title: "工具学习",
+                images: [
+                    "images/guard.png",
+                    "images/web.png",
+                    "images/web2.png",
+                    "images/webai.png"
+                ],
+                items: [
+                    "CircleCat CSC101 — Python 编程基础：掌握数据处理与自动化基础",
+                    "Tableau 课程：学会结构化导出数据与清洗",
+                    "WordPress 建站：独立搭建并维护个人项目站点",
+                    "AI 图文创作、工作流搭建、网页搭建"
+                ]
+            },
+            category2: {
+                title: "公益领域积累",
+                images: [
+                    "images/meal.png",
+                    "images/myself.jpg",
+                    "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=MEAL%20monitoring%20evaluation%20learning&image_size=square"
+                ],
+                items: [
+                    "CDR资助之道训练营",
+                    "PMD监测评估实训营",
+                    "救助儿童会青年创新创业实验室",
+                    "三一基金会科学公益通识课程第6辑：慈善的精进"
+                ]
+            },
+            category3: {
+                title: "内容与表达",
+                images: [
+                    "images/myself2.jpg",
+                    "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=social%20issues%20expression&image_size=square"
+                ],
+                items: [
+                    "资助工作者共写营",
+                    "心声伙伴Mind Fellow精神健康亲历者协力营"
+                ]
+            }
+        };
+
+        // 获取DOM元素
+        const learningCategories = document.querySelectorAll('.learning-category');
+        const learningModal = document.getElementById('learning-modal');
+        const closeModal = document.getElementById('close-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalList = document.getElementById('modal-list');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const imageIndicators = document.querySelector('.image-indicators');
+        const imageCount = document.querySelector('.image-count');
+
+        // 当前图片索引和当前分类ID
+        let currentImageIndex = 0;
+        let currentCategoryId = '';
+
+        // 打开模态框函数
+        function openModal(categoryId) {
+            const data = learningData[categoryId];
+            currentCategoryId = categoryId;
+            currentImageIndex = 0;
+            
+            // 填充数据
+            modalTitle.textContent = data.title;
+            modalImage.src = data.images[currentImageIndex];
+            
+            // 生成列表
+            modalList.innerHTML = '';
+            data.items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                modalList.appendChild(li);
+            });
+            
+            // 生成图片指示器
+            generateImageIndicators(data.images.length);
+            
+            // 更新图片计数
+            updateImageCount();
+            
+            // 显示模态框
+            learningModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 生成图片指示器
+        function generateImageIndicators(count) {
+            imageIndicators.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator' + (i === 0 ? ' active' : '');
+                indicator.dataset.index = i;
+                indicator.addEventListener('click', () => {
+                    currentImageIndex = i;
+                    updateImage();
+                });
+                imageIndicators.appendChild(indicator);
+            }
+        }
+
+        // 更新图片
+        function updateImage() {
+            const data = learningData[currentCategoryId];
+            modalImage.src = data.images[currentImageIndex];
+            
+            // 更新指示器
+            document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentImageIndex);
+            });
+            
+            // 更新图片计数
+            updateImageCount();
+        }
+
+        // 更新图片计数
+        function updateImageCount() {
+            const data = learningData[currentCategoryId];
+            imageCount.textContent = `${currentImageIndex + 1}/${data.images.length}`;
+        }
+
+        // 下一张图片
+        function nextImage() {
+            const data = learningData[currentCategoryId];
+            currentImageIndex = (currentImageIndex + 1) % data.images.length;
+            updateImage();
+        }
+
+        // 上一张图片
+        function prevImage() {
+            const data = learningData[currentCategoryId];
+            currentImageIndex = (currentImageIndex - 1 + data.images.length) % data.images.length;
+            updateImage();
+        }
+
+        // 关闭模态框函数
+        function closeModalFunc() {
+            learningModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 为每个分类卡片添加点击事件
+        learningCategories.forEach((category, index) => {
+            category.addEventListener('click', () => {
+                const categoryId = `category${index + 1}`;
+                openModal(categoryId);
+            });
+        });
+
+        // 为切换按钮添加点击事件
+        prevBtn.addEventListener('click', prevImage);
+        nextBtn.addEventListener('click', nextImage);
+
+        // 为图片添加右击菜单
+        modalImage.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            alert('图片查看功能：您可以使用左右箭头切换图片');
+        });
+
+        // 关闭模态框事件
+        closeModal.addEventListener('click', closeModalFunc);
+        learningModal.addEventListener('click', (e) => {
+            if (e.target === learningModal) {
+                closeModalFunc();
+            }
+        });
+    </script>
+
+</body>
+</html>
