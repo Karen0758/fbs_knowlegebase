@@ -1,0 +1,48 @@
+backend:
+  name: github
+  repo: Karen0758/knowledgebase
+  branch: main
+  base_url: https://api.netlify.com
+
+media_folder: "static/images"
+public_folder: "/images"
+
+locale: "zh_Hans"
+
+collections:
+  - name: "stories"
+    label: "亲历者故事"
+    folder: "content/stories"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "排序权重（数字越小越靠前）", name: "weight", widget: "number", value_type: "int" }
+      - { label: "侧边栏预览文字", name: "preview", widget: "string" }
+      - { label: "结语（页面底部签名）", name: "signoff", widget: "string" }
+      - { label: "正文", name: "body", widget: "markdown" }
+
+  - name: "research"
+    label: "研究动态"
+    folder: "content/research"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "排序权重（数字越小越靠前）", name: "weight", widget: "number", value_type: "int" }
+      - { label: "侧边栏预览文字", name: "preview", widget: "string" }
+      - { label: "分类标签（如：研究综述、实用指南）", name: "meta_label", widget: "string" }
+      - { label: "副标题", name: "subtitle", widget: "string" }
+      - { label: "结语（页面底部签名）", name: "signoff", widget: "string" }
+      - { label: "正文", name: "body", widget: "markdown" }
+
+  - name: "activities"
+    label: "行动组织"
+    folder: "content/activities"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "排序权重（数字越小越靠前）", name: "weight", widget: "number", value_type: "int" }
+      - { label: "日期标签（如：2024 年活动）", name: "date_label", widget: "string" }
+      - { label: "简介", name: "description", widget: "text" }

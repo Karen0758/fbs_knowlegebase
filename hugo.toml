@@ -1,0 +1,11 @@
+baseURL = "https://ly.futurebeyondscars.cn/"
+defaultContentLanguage = "zh-cn"
+title = "无痕未来 FutureBeyondScars"
+
+[build]
+  writeStats = false
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
