@@ -2,8 +2,6 @@ backend:
   name: github
   repo: Karen0758/knowledgebase
   branch: main
-  base_url: https://api.netlify.com
-  site_domain: futurebeyondscars.netlify.app
 
 site_url: https://karen0758.github.io/knowledgebase
 display_url: https://karen0758.github.io/knowledgebase
