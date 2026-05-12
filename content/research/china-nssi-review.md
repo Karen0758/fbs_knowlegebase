@@ -1,22 +1,22 @@
 ---
-title: "中国非自杀性自伤研究综述"
+title: 中国非自杀性自伤行为研究综述 – 翻译01
 weight: 1
-preview: "基于 The Lancet 子刊发表的系统综述……"
-meta_label: "研究综述"
-subtitle: "基于 The Lancet Regional Health – Western Pacific 发表的系统综述"
-signoff: "理解是改变的起点。"
+preview: 中国非自杀性自伤行为研究综述 – 翻译01
+meta_label: 研究综述
+subtitle: 'Non-suicidal self-injury in Chinese population: a scoping review of prevalence, method, risk factors and preventive interventions'
+signoff: Future Beyond Scars
 ---
 
-非自杀性自伤（NSSI）是指个体在没有自杀意图的情况下，故意、直接地损伤自身身体组织的行为，如割伤、烧伤、撞击等。
+本篇推文整理自在《柳叶刀-区域卫生-西太平洋》（The Lancet Regional Health-Western Pacific）发表的题为 [Non-suicidal self-injury in Chinese population: a scoping review of prevalence, method, risk factors and preventive interventions](https://pubmed.ncbi.nlm.nih.gov/37693882/)的综述文章。作为首篇文章，我计划先从一篇研究综述开始，这篇综述能让从研究者视角了解非自杀性自伤行为（NSSI）整体的患病率、症状表现、风险因素有哪些，从而更好地理解自身的症状。
 
-## 流行率
+**那么，我们先来看两个基础的问题，**
 
-根据综述数据，中国青少年 NSSI 的合并流行率约为 27.4%，显著高于全球平均水平（约 17%-18%）。大学生群体的流行率约为 16.2%，临床青少年样本中高达 49.3%。这些数据表明，NSSI 在中国青少年中是一个广泛存在的公共卫生问题。
+**什么是非自杀性自伤行为 (NSSI) ？**
 
-## 风险因素
+![](https://www.futurebeyondscars.cn/wp-content/uploads/2025/10/1-2-724x1024.png)
 
-研究识别出的风险因素包括：心理因素（抑郁、焦虑、情绪调节困难）、人际因素（同伴欺凌、家庭冲突、亲子关系不良）、以及社会文化因素（学业压力、社交媒体影响）。值得注意的是，童年期的不良经历（如虐待、忽视）是 NSSI 的重要预测因子。
+![](https://www.futurebeyondscars.cn/wp-content/uploads/2025/10/4-2-724x1024.png)
 
-## 干预现状
+![](https://www.futurebeyondscars.cn/wp-content/uploads/2025/10/5-2-724x1024.png)
 
-目前中国针对 NSSI 的干预研究仍较有限，多数为学校层面的心理健康教育或个体层面的认知行为治疗。研究者呼吁开发更多文化适应性的干预方案，加强学校心理健康服务体系建设，并提升公众对 NSSI 的认知与理解。
+![](https://www.futurebeyondscars.cn/wp-content/uploads/2025/10/6-2-538x1024.png)
