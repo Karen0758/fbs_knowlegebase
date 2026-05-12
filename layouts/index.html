@@ -184,6 +184,7 @@
   .reader-body .quiet { color: var(--ink-mute); font-size: 13.5px; line-height: 1.75; }
   .reader-body .signoff { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line-soft); color: var(--ink-mute); font-size: 14px; letter-spacing: 0.05em; }
   .reader-body .signoff::before { content: ""; display: inline-block; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; margin-right: 10px; transform: translateY(-2px); }
+  .reader-body .signoff-fixed { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line-soft); color: var(--ink-mute); font-size: 14px; letter-spacing: 0.12em; text-align: right; font-family: var(--font-sans); font-weight: 400; }
 
   /* Voices / stories */
   .voices { display: flex; flex-direction: column; gap: 24px; margin-top: 6px; }
@@ -404,7 +405,7 @@
           <div class="reader-subtitle">{{ .Params.subtitle }}</div>
           <div class="reader-body">
             {{ .Content }}
-            <div class="signoff">{{ .Params.signoff }}</div>
+            <div class="signoff-fixed">Future Beyond Scars</div>
           </div>
         </div>
         {{ end }}
@@ -417,22 +418,38 @@
           <svg class="reader-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
         </div>
 
-        <h1 class="reader-title">行动<span class="accent">组织</span></h1>
-        <div class="reader-subtitle">我们参与和组织的精神健康相关活动</div>
+        <!-- 活动列表 -->
+        <div id="activity-list">
+          <h1 class="reader-title">行动<span class="accent">组织</span></h1>
+          <div class="reader-subtitle">我们参与和组织的精神健康相关活动</div>
 
-        <div class="reader-body">
-          <p class="lead">无痕未来持续参与精神健康领域的公共教育与社区活动，致力于让更多人了解和关注非自杀性自伤议题。</p>
+          <div class="reader-body">
+            <p class="lead">无痕未来持续参与精神健康领域的公共教育与社区活动，致力于让更多人了解和关注非自杀性自伤议题。</p>
 
-          <div class="activity-grid">
-            {{ range (where site.RegularPages "Section" "activities").ByWeight }}
-            <div class="activity-card">
-              <div class="activity-card-date">{{ .Params.date_label }}</div>
-              <div class="activity-card-title">{{ .Title }}</div>
-              <div class="activity-card-desc">{{ .Params.description }}</div>
+            <div class="voices">
+              {{ range (where site.RegularPages "Section" "activities").ByWeight }}
+              <div class="voice" onclick="showActivity('activity-{{ .File.ContentBaseName }}')">
+                <div class="voice-title">{{ .Title }}</div>
+                <div class="voice-text">{{ .Params.subtitle }}</div>
+                <div class="voice-meta">{{ .Params.meta_label }}</div>
+              </div>
+              {{ end }}
             </div>
-            {{ end }}
           </div>
         </div>
+
+        <!-- 活动详情 -->
+        {{ range (where site.RegularPages "Section" "activities").ByWeight }}
+        <div class="article-detail" id="activity-{{ .File.ContentBaseName }}">
+          <button class="story-back" onclick="hideActivity('activity-{{ .File.ContentBaseName }}')">← 返回行动组织</button>
+          <h1 class="reader-title" style="font-size:28px;">{{ .Title }}</h1>
+          <div class="reader-subtitle">{{ .Params.subtitle }}</div>
+          <div class="reader-body">
+            {{ .Content }}
+            <div class="signoff-fixed">Future Beyond Scars</div>
+          </div>
+        </div>
+        {{ end }}
       </div>
 
       <!-- ==================== 关于我们 ==================== -->
@@ -487,7 +504,7 @@
     ],
     activity: [
       {{ range $i, $p := (where site.RegularPages "Section" "activities").ByWeight }}
-      { date: '{{ $p.Params.date_label }}', title: '{{ $p.Title }}', preview: '{{ $p.Params.description | truncate 30 }}', {{ if eq $i 0 }}active: true, {{ end }} },
+      { date: '{{ $p.Params.meta_label }}', title: '{{ $p.Title }}', preview: '{{ $p.Params.preview }}', {{ if eq $i 0 }}active: true, {{ end }}action: 'activity-{{ $p.File.ContentBaseName }}' },
       {{ end }}
     ],
     about: [
@@ -522,6 +539,8 @@
         if (action) {
           if (action.startsWith('article')) {
             showArticle(action);
+          } else if (action.startsWith('activity')) {
+            showActivity(action);
           } else {
             showStory(action);
           }
@@ -556,6 +575,24 @@
     entries.forEach((e, i) => e.classList.toggle('active', i === 0));
   }
 
+  function showActivity(id) {
+    document.getElementById('activity-list').style.display = 'none';
+    document.querySelectorAll('.article-detail').forEach(d => d.classList.remove('active'));
+    const detail = document.getElementById(id);
+    detail.classList.add('active');
+    triggerAnimations(detail);
+    entryList.querySelectorAll('.entry').forEach(el => {
+      el.classList.toggle('active', el.dataset.action === id);
+    });
+  }
+
+  function hideActivity(id) {
+    document.getElementById(id).classList.remove('active');
+    document.getElementById('activity-list').style.display = '';
+    const entries = entryList.querySelectorAll('.entry');
+    entries.forEach((e, i) => e.classList.toggle('active', i === 0));
+  }
+
   function switchTab(tabKey) {
     currentTab = tabKey;
     document.querySelectorAll('.story-detail').forEach(d => d.classList.remove('active'));
@@ -564,6 +601,8 @@
     if (storiesList) storiesList.style.display = '';
     const researchList = document.getElementById('research-list');
     if (researchList) researchList.style.display = '';
+    const activityList = document.getElementById('activity-list');
+    if (activityList) activityList.style.display = '';
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabKey));
     panes.forEach(p => p.classList.toggle('active', p.dataset.pane === tabKey));
     renderEntries(tabKey);

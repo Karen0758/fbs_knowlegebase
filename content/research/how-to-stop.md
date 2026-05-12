@@ -4,7 +4,6 @@ weight: 2
 preview: 有哪些替代性方案可以尝试？
 meta_label: 实用指南
 subtitle: 资料改编自:Distraction Techniques and Alternative Coping Strategies by Ericka Kilburn & Janis Whitlock
-signoff: 每一次尝试都有意义
 ---
 
 **01 溯源实用工具）**
