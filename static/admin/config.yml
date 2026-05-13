@@ -49,3 +49,19 @@ collections:
       - { label: "分类标签（如：2024 年活动）", name: "meta_label", widget: "string" }
       - { label: "副标题", name: "subtitle", widget: "string" }
       - { label: "正文", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "独立页面"
+    files:
+      - name: "resources"
+        label: "网站资源"
+        file: "content/pages/resources.md"
+        fields:
+          - { label: "标题", name: "title", widget: "string" }
+          - { label: "正文", name: "body", widget: "markdown" }
+      - name: "help"
+        label: "求助入口"
+        file: "content/pages/help.md"
+        fields:
+          - { label: "标题", name: "title", widget: "string" }
+          - { label: "正文", name: "body", widget: "markdown" }

@@ -96,21 +96,21 @@
     transition: grid-template-columns 0.35s cubic-bezier(0.4,0,0.2,1);
   }
 
-  /* Sunrise */
+  /* Sunrise (triggered by help card hover) */
   .sunrise { position: absolute; right: 60px; top: -320px; width: 200px; height: 200px; pointer-events: none; opacity: 0; transition: top 1.8s cubic-bezier(0.22,0.61,0.36,1), opacity 1.4s cubic-bezier(0.4,0,0.2,1); z-index: 5; }
   .sunrise svg { width: 100%; height: 100%; display: block; }
-  .folder:has(.safe-anchor:hover) .sunrise { opacity: 1; top: 30px; }
+  .folder:has(.help-card:hover) .sunrise { opacity: 1; top: 30px; }
 
-  /* Rest overlay */
-  .rest-overlay { position: absolute; inset: 0; background: var(--desk); opacity: 0; pointer-events: none; transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1); z-index: 4;
-    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000' preserveAspectRatio='none'><rect width='1000' height='1000' fill='white'/><rect x='-20' y='850' width='320' height='180' rx='14' fill='black'/></svg>");
-    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000' preserveAspectRatio='none'><rect width='1000' height='1000' fill='white'/><rect x='-20' y='850' width='320' height='180' rx='14' fill='black'/></svg>");
+  /* Rest overlay — only covers sidebar */
+  .rest-overlay { position: absolute; left: 0; top: 0; bottom: 0; width: 320px; background: var(--desk); opacity: 0; pointer-events: none; transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1); z-index: 4;
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 1000' preserveAspectRatio='none'><rect width='320' height='1000' fill='white'/><rect x='-20' y='850' width='360' height='180' rx='14' fill='black'/></svg>");
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 1000' preserveAspectRatio='none'><rect width='320' height='1000' fill='white'/><rect x='-20' y='850' width='360' height='180' rx='14' fill='black'/></svg>");
     -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   }
-  .folder:has(.safe-anchor:hover) .rest-overlay { opacity: 0.96; }
-  .rest-message { position: absolute; left: 50%; top: 58%; transform: translate(-50%,-50%) translateY(20px); z-index: 6; opacity: 0; pointer-events: none; transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1) 0.4s, transform 1.6s cubic-bezier(0.22,0.61,0.36,1) 0.4s; text-align: center; color: rgba(255,255,255,0.92); font-family: var(--font-serif); font-weight: 400; letter-spacing: 0.12em; font-size: 20px; line-height: 1.7; }
+  .folder:has(.help-card:hover) .rest-overlay { opacity: 0.96; }
+  .rest-message { position: absolute; left: 160px; top: 45%; transform: translate(-50%,-50%) translateY(20px); z-index: 6; opacity: 0; pointer-events: none; transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1) 0.4s, transform 1.6s cubic-bezier(0.22,0.61,0.36,1) 0.4s; text-align: center; color: rgba(255,255,255,0.92); font-family: var(--font-serif); font-weight: 400; letter-spacing: 0.12em; font-size: 20px; line-height: 1.7; }
   .rest-message-sub { display: block; margin-top: 12px; font-size: 12px; font-family: var(--font-sans); letter-spacing: 0.18em; color: rgba(255,255,255,0.55); font-weight: 300; }
-  .folder:has(.safe-anchor:hover) .rest-message { opacity: 1; transform: translate(-50%,-50%); }
+  .folder:has(.help-card:hover) .rest-message { opacity: 1; transform: translate(-50%,-50%); }
 
   /* ===== Sidebar ===== */
   .sidebar {
@@ -122,18 +122,19 @@
     transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
     overflow: hidden;
   }
-  .sidebar.collapsed { width: 44px; overflow: visible; }
-  .sidebar.collapsed .sidebar-head-content,
+  .sidebar.collapsed { width: 44px; overflow: hidden; }
+  .sidebar.collapsed .sidebar-head,
   .sidebar.collapsed .entry-list,
   .sidebar.collapsed .sidebar-foot { opacity: 0; pointer-events: none; transition: opacity 0.15s; }
-  .sidebar.collapsed .sidebar-head { justify-content: center; padding: 0 8px 16px; border-bottom: none; }
+  .sidebar.collapsed .sidebar-expand { opacity: 1; pointer-events: auto; }
 
   .sidebar-head {
     padding: 0 20px 16px; display: flex; justify-content: space-between; align-items: center;
     border-bottom: 1px solid var(--line-soft); margin: 0 0 6px; flex-shrink: 0;
   }
   .sidebar-head-content { display: flex; align-items: baseline; gap: 8px; transition: opacity 0.25s; }
-  .sidebar-title { font-family: var(--font-serif); font-weight: 500; font-size: 18px; letter-spacing: 0.04em; white-space: nowrap; }
+  .sidebar-title { font-family: var(--font-serif); font-weight: 500; font-size: 18px; letter-spacing: 0.04em; white-space: nowrap; cursor: pointer; transition: color 0.2s; }
+  .sidebar-title:hover { color: var(--accent); }
   .sidebar-title em { font-family: var(--font-sans); font-style: normal; color: var(--ink-mute); font-weight: 300; font-size: 12px; }
 
   /* Collapse toggle */
@@ -143,8 +144,18 @@
     border-radius: 4px; transition: background 0.2s, color 0.2s; flex-shrink: 0;
   }
   .sidebar-toggle:hover { background: rgba(0,0,0,0.04); color: var(--ink); }
-  .sidebar-toggle svg { width: 16px; height: 16px; transition: transform 0.35s; }
-  .sidebar.collapsed .sidebar-toggle svg { transform: rotate(180deg); }
+  .sidebar-toggle svg { width: 16px; height: 16px; }
+
+  /* Expand button (visible only when collapsed) */
+  .sidebar-expand {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    width: 28px; height: 28px; border: none; background: none; cursor: pointer;
+    color: var(--ink-mute); display: flex; align-items: center; justify-content: center;
+    border-radius: 4px; transition: background 0.2s, color 0.2s, opacity 0.25s;
+    opacity: 0; pointer-events: none; z-index: 10;
+  }
+  .sidebar-expand:hover { background: rgba(0,0,0,0.04); color: var(--ink); }
+  .sidebar-expand svg { width: 16px; height: 16px; }
 
   .entry-list { flex: 1; overflow-y: auto; transition: opacity 0.25s; min-height: 0; }
   .entry { padding: 14px 20px 14px 18px; border-left: 2px solid transparent; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
@@ -154,29 +165,36 @@
   .entry-title { font-size: 14.5px; font-weight: 400; color: var(--ink); margin-bottom: 3px; letter-spacing: 0.03em; line-height: 1.4; }
   .entry-preview { font-size: 12px; color: var(--ink-mute); line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .sidebar-foot { margin-top: auto; padding: 14px 20px 4px; border-top: 1px solid var(--line-soft); position: relative; z-index: 7; flex-shrink: 0; transition: opacity 0.25s; }
-  .safe-anchor { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; background: rgba(122,46,46,0.05); border: 1px solid rgba(122,46,46,0.15); border-radius: 4px; text-decoration: none; color: var(--accent); transition: background 0.2s; }
-  .safe-anchor:hover { background: rgba(122,46,46,0.09); }
-  .safe-anchor-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; animation: breathe 3.6s ease-in-out infinite; }
-  @keyframes breathe { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-  .safe-anchor-text { font-size: 12px; line-height: 1.5; letter-spacing: 0.04em; }
-  .safe-anchor-text strong { display: block; font-weight: 500; margin-bottom: 2px; font-size: 12.5px; }
+  .sidebar-foot { margin-top: auto; padding: 14px 20px 8px; border-top: 1px solid var(--line-soft); position: relative; z-index: 7; flex-shrink: 0; transition: opacity 0.25s; }
+  .sidebar-foot-title { font-size: 12px; font-weight: 500; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 8px; }
+  .sidebar-foot-cards { display: flex; gap: 8px; }
+  .sidebar-foot-card { flex: 1; display: flex; align-items: center; gap: 6px; padding: 10px 10px; background: rgba(122,46,46,0.04); border: 1px solid rgba(122,46,46,0.12); border-radius: 4px; text-decoration: none; color: var(--ink-soft); transition: background 0.2s, border-color 0.2s; font-size: 12px; letter-spacing: 0.04em; cursor: pointer; }
+  .sidebar-foot-card:hover { background: rgba(122,46,46,0.08); border-color: rgba(122,46,46,0.2); }
+  .sidebar-foot-card svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--accent); }
 
   /* ===== Reader ===== */
   .reader { padding: 30px 56px 40px 48px; position: relative; overflow-y: auto; }
   .reader-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .reader-stamp { font-size: 11px; color: var(--ink-mute); letter-spacing: 0.04em; }
-  .reader-stamp em { font-style: normal; font-size: 11px; color: var(--ink-soft); margin-left: 2px; }
-  .reader-icon { width: 20px; height: 20px; color: var(--ink-faint); cursor: pointer; transition: color 0.2s, transform 0.4s; }
-  .reader-icon:hover { color: var(--ink-soft); transform: rotate(60deg); }
+  .reader-path { font-size: 11px; color: var(--ink-mute); letter-spacing: 0.04em; }
+  .reader-path span { cursor: pointer; transition: color 0.2s; }
+  .reader-path span:hover { color: var(--ink); }
+  .reader-path .rp-sep { cursor: default; margin: 0 4px; }
+  .reader-path .rp-sep:hover { color: var(--ink-mute); }
+  .reader-path .rp-current { color: var(--ink-soft); font-weight: 500; cursor: default; }
+  .reader-path .rp-current:hover { color: var(--ink-soft); }
+  .heart-btn { display: flex; align-items: center; gap: 6px; border: none; background: none; cursor: pointer; color: var(--ink-faint); transition: color 0.2s; font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.04em; padding: 4px 8px; border-radius: 4px; }
+  .heart-btn:hover { color: var(--accent); }
+  .heart-btn.liked { color: var(--accent); }
+  .heart-btn svg { width: 18px; height: 18px; transition: transform 0.3s; }
+  .heart-btn.liked svg { transform: scale(1.2); }
+  .heart-btn .heart-count { font-size: 12px; color: inherit; }
 
-  .reader-title { font-family: var(--font-serif); font-weight: 500; font-size: 36px; line-height: 1.3; letter-spacing: 0.02em; color: var(--ink); margin: 0 0 8px; }
-  .reader-title .accent { font-style: normal; font-weight: 500; color: var(--ink-soft); position: relative; }
-  .reader-title .accent::after { content: ""; position: absolute; left: 4%; right: 4%; bottom: 2px; height: 5px; background: rgba(122,46,46,0.12); border-radius: 2px; z-index: -1; }
+  .reader-title { font-family: var(--font-serif); font-weight: 500; font-size: 36px; line-height: 1.3; letter-spacing: 0.02em; color: var(--ink); margin: 0 0 8px; display: block; padding-bottom: 4px; background-image: linear-gradient(rgba(122,46,46,0.12), rgba(122,46,46,0.12)); background-position: 0 100%; background-size: 100% 3px; background-repeat: no-repeat; }
+  .reader-title .accent { font-style: normal; font-weight: 500; color: var(--ink-soft); }
   .reader-subtitle { font-size: 13px; color: var(--ink-mute); letter-spacing: 0.08em; margin-bottom: 28px; font-weight: 400; }
 
-  .reader-body { max-width: 680px; font-size: 14.5px; line-height: 1.85; color: var(--ink-soft); letter-spacing: 0.02em; font-weight: 400; transition: max-width 0.35s; }
-  .folder:has(.sidebar.collapsed) .reader-body { max-width: 860px; }
+  .reader-body { max-width: 100%; font-size: 14.5px; line-height: 1.85; color: var(--ink-soft); letter-spacing: 0.02em; font-weight: 400; transition: max-width 0.35s; }
+  .folder:has(.sidebar.collapsed) .reader-body { max-width: 100%; }
   .reader-body p { margin: 0 0 18px; }
   .reader-body p.lead { font-family: var(--font-serif); font-size: 17px; font-weight: 400; color: var(--ink); line-height: 1.7; margin-bottom: 28px; letter-spacing: 0.03em; }
   .reader-body h2 { font-family: var(--font-serif); font-weight: 500; font-size: 20px; color: var(--ink); margin: 36px 0 12px; letter-spacing: 0.04em; }
@@ -185,6 +203,22 @@
   .reader-body .signoff { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line-soft); color: var(--ink-mute); font-size: 14px; letter-spacing: 0.05em; }
   .reader-body .signoff::before { content: ""; display: inline-block; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; margin-right: 10px; transform: translateY(-2px); }
   .reader-body .signoff-fixed { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line-soft); color: var(--ink-mute); font-size: 14px; letter-spacing: 0.12em; text-align: right; font-family: var(--font-sans); font-weight: 400; }
+
+  /* Blockquote */
+  .reader-body blockquote {
+    position: relative; margin: 24px 0; padding: 20px 24px 16px 36px;
+    border: none; border-left: 2px solid var(--line);
+    background: rgba(0,0,0,0.012); border-radius: 0 6px 6px 0;
+    font-family: var(--font-serif); font-size: 15px; line-height: 1.8;
+    color: var(--ink-soft);
+  }
+  .reader-body blockquote::before {
+    content: "\201C"; position: absolute; left: -10px; top: -8px;
+    font-family: var(--font-serif); font-size: 48px; line-height: 1;
+    color: var(--accent); opacity: 0.35;
+  }
+  .reader-body blockquote p { margin: 0 0 8px; }
+  .reader-body blockquote p:last-child { margin-bottom: 0; }
 
   /* Voices / stories */
   .voices { display: flex; flex-direction: column; gap: 24px; margin-top: 6px; }
@@ -214,10 +248,9 @@
   .article-detail.active { display: block; }
 
   /* Reader body images */
-  .reader-body img { max-width: 100%; height: auto; border-radius: 6px; margin: 12px 0; }
+  .reader img, .reader p img, .reader-body img { width: 75% !important; max-width: 75% !important; height: auto !important; border-radius: 6px; margin: 12px auto; display: block; }
 
-  /* Seal */
-  .seal { position: absolute; bottom: 28px; right: 40px; width: 52px; height: 52px; border: 1px solid var(--accent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 10px; color: var(--accent); letter-spacing: 0.06em; text-align: center; line-height: 1.3; opacity: 0.6; transform: rotate(-3deg); pointer-events: none; font-weight: 500; }
+  /* Activity cards (legacy, kept for reference) */
 
   /* Tab switching */
   .pane { display: none; }
@@ -256,7 +289,6 @@
     .entry-list { max-height: 200px; }
     .reader { padding: 24px 20px 40px; }
     .reader-title { font-size: 26px; }
-    .seal { display: none; }
   }
 </style>
 </head>
@@ -306,9 +338,12 @@
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
+      <button class="sidebar-expand" id="sidebarExpand" title="展开索引">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
       <div class="sidebar-head">
         <div class="sidebar-head-content">
-          <div class="sidebar-title">索引 <em>· index</em></div>
+          <div class="sidebar-title" onclick="goToRoot()">Future Beyond Scars <em>· 知识库</em></div>
         </div>
         <button class="sidebar-toggle" id="sidebarToggle" title="折叠索引">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
@@ -316,13 +351,17 @@
       </div>
       <div class="entry-list" id="entryList"></div>
       <div class="sidebar-foot">
-        <a href="tel:4001619995" class="safe-anchor" id="safeAnchor">
-          <span class="safe-anchor-dot"></span>
-          <span class="safe-anchor-text">
-            <strong>如果此刻不太好</strong>
-            希望24热线：400-161-9995
-          </span>
-        </a>
+        <div class="sidebar-foot-title">如果此刻不太好</div>
+        <div class="sidebar-foot-cards">
+          <div class="sidebar-foot-card" onclick="showPane('resources')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+            网站资源
+          </div>
+          <div class="sidebar-foot-card help-card" onclick="showPane('help')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.05 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            求助入口
+          </div>
+        </div>
       </div>
     </aside>
 
@@ -332,14 +371,16 @@
       <!-- ==================== 亲历者分享 ==================== -->
       <div class="pane active" data-pane="stories">
         <div class="reader-head">
-          <div class="reader-stamp">亲历者分享 · <em>去除污名，看见疗愈</em></div>
-          <svg class="reader-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+          <div class="reader-path" id="reader-path-stories"></div>
+          <button class="heart-btn" onclick="toggleLike('stories')" id="heart-stories">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="heart-count" id="heart-count-stories">0</span>
+          </button>
         </div>
 
         <!-- 故事列表 -->
         <div id="stories-list">
           <h1 class="reader-title">亲历者<span class="accent">故事</span></h1>
-          <div class="reader-subtitle">通过亲历者讲述去除自伤污名，看见疗愈空间</div>
 
           <div class="reader-body">
             <p class="lead">本栏目收集亲历者故事。每一段讲述都经过本人同意。它们不是为了展示伤痛，而是为了让更多人知道——这件事可以被说出来。</p>
@@ -365,6 +406,7 @@
           <div class="reader-body">
             {{ .Content }}
             <div class="signoff">{{ .Params.signoff }}</div>
+            <div class="signoff-fixed">Future Beyond Scars</div>
           </div>
         </div>
         {{ end }}
@@ -373,14 +415,16 @@
       <!-- ==================== 研究动态 ==================== -->
       <div class="pane" data-pane="research">
         <div class="reader-head">
-          <div class="reader-stamp">研究动态 · <em>理解自伤行为的科学视角</em></div>
-          <svg class="reader-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+          <div class="reader-path" id="reader-path-research"></div>
+          <button class="heart-btn" onclick="toggleLike('research')" id="heart-research">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="heart-count" id="heart-count-research">0</span>
+          </button>
         </div>
 
         <!-- 研究列表 -->
         <div id="research-list">
           <h1 class="reader-title">研究<span class="accent">动态</span></h1>
-          <div class="reader-subtitle">关于非自杀性自伤行为的学术研究与实用知识</div>
 
           <div class="reader-body">
             <p class="lead">本栏目整理与非自杀性自伤（NSSI）相关的研究成果和实用信息，帮助读者从科学角度理解自伤行为。</p>
@@ -414,14 +458,16 @@
       <!-- ==================== 行动组织 ==================== -->
       <div class="pane" data-pane="activity">
         <div class="reader-head">
-          <div class="reader-stamp">行动组织 · <em>社区活动与公共教育</em></div>
-          <svg class="reader-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+          <div class="reader-path" id="reader-path-activity"></div>
+          <button class="heart-btn" onclick="toggleLike('activity')" id="heart-activity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="heart-count" id="heart-count-activity">0</span>
+          </button>
         </div>
 
         <!-- 活动列表 -->
         <div id="activity-list">
           <h1 class="reader-title">行动<span class="accent">组织</span></h1>
-          <div class="reader-subtitle">我们参与和组织的精神健康相关活动</div>
 
           <div class="reader-body">
             <p class="lead">无痕未来持续参与精神健康领域的公共教育与社区活动，致力于让更多人了解和关注非自杀性自伤议题。</p>
@@ -455,12 +501,14 @@
       <!-- ==================== 关于我们 ==================== -->
       <div class="pane" data-pane="about">
         <div class="reader-head">
-          <div class="reader-stamp">无痕未来 · <em>FutureBeyondScars</em></div>
-          <svg class="reader-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+          <div class="reader-path" id="reader-path-about"></div>
+          <button class="heart-btn" onclick="toggleLike('about')" id="heart-about">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="heart-count" id="heart-count-about">0</span>
+          </button>
         </div>
 
         <h1 class="reader-title"><span class="accent">无痕未来</span></h1>
-        <div class="reader-subtitle">关于非自杀性自伤行为的一个知识库</div>
 
         <div class="reader-body">
           <p class="lead">我们是一家精神健康领域亲历者发起的组织，在这里，我们尝试理解自伤行为、书写自伤故事、共筑讨论空间。在更长的时间里，与自伤记忆共处。</p>
@@ -480,10 +528,51 @@
           <p>推动这个项目，不仅是为了亲历者，也为了他们身边的人：希望家长、老师、朋友在面对自伤行为时能多一些理解、少一些惊恐；希望专业从业者能兼顾风险识别与理解，倾听行为背后的原因；希望社交媒体能重还讨论的空间，让算法的使用不失人性。</p>
 
           <div class="signoff">与伤痕共处，向未来生长。</div>
+          <div class="signoff-fixed">Future Beyond Scars</div>
+        </div>
+      </div>
+
+      <!-- ==================== 网站资源 ==================== -->
+      {{ $resources := site.GetPage "/pages/resources" }}
+      {{ with $resources }}
+      <div class="pane" data-pane="resources">
+        <div class="reader-head">
+          <div class="reader-path" id="reader-path-resources"></div>
+          <button class="heart-btn" onclick="toggleLike('resources')" id="heart-resources">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="heart-count" id="heart-count-resources">0</span>
+          </button>
         </div>
 
-        <div class="seal">无痕<br>未来</div>
+        <h1 class="reader-title">网站<span class="accent">资源</span></h1>
+
+        <div class="reader-body">
+          {{ .Content }}
+          <div class="signoff-fixed">Future Beyond Scars</div>
+        </div>
       </div>
+      {{ end }}
+
+      <!-- ==================== 求助入口 ==================== -->
+      {{ $help := site.GetPage "/pages/help" }}
+      {{ with $help }}
+      <div class="pane" data-pane="help">
+        <div class="reader-head">
+          <div class="reader-path" id="reader-path-help"></div>
+          <button class="heart-btn" onclick="toggleLike('help')" id="heart-help">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="heart-count" id="heart-count-help">0</span>
+          </button>
+        </div>
+
+        <h1 class="reader-title">求助<span class="accent">入口</span></h1>
+
+        <div class="reader-body">
+          {{ .Content }}
+          <div class="signoff-fixed">Future Beyond Scars</div>
+        </div>
+      </div>
+      {{ end }}
 
     </main>
   </div>
@@ -491,6 +580,15 @@
 
 <script>
   // ===== Data (generated from Hugo content) =====
+  const tabNames = {
+    stories: '亲历者分享',
+    research: '研究动态',
+    activity: '行动组织',
+    about: '关于我们',
+    resources: '网站资源',
+    help: '求助入口'
+  };
+
   const entriesByTab = {
     stories: [
       {{ range $i, $p := (where site.RegularPages "Section" "stories").ByWeight }}
@@ -512,6 +610,16 @@
       { date: '行动', title: '推进改变', preview: '让改变变得可见、可学、可达……' },
       { date: '愿景', title: '和谐共处', preview: '与伤疤共处，与那段记忆达成和解……' },
     ],
+    resources: [
+      { date: '减压', title: '对抗焦虑 / 抑郁', preview: '帮助你静下心来的网站资源……', active: true },
+      { date: '娱乐', title: '纯粹娱乐', preview: '探索互联网的奇妙角落……' },
+    ],
+    help: [
+      { date: '热线', title: '24小时危机热线', preview: '希望24热线：400-161-9995', active: true },
+      { date: '在线', title: '在线求助', preview: '全国心理援助热线平台……' },
+      { date: '陪伴', title: '身边的人正在自伤', preview: '保持冷静，倾听，陪伴……' },
+      { date: '紧急', title: '紧急情况', preview: '急救电话 120 / 报警电话 110' },
+    ],
   };
 
   const entryList = document.getElementById('entryList');
@@ -520,7 +628,80 @@
   const sidebar = document.getElementById('sidebar');
   const sidebarToggle = document.getElementById('sidebarToggle');
   let currentTab = 'stories';
+  let currentArticleTitle = null;
 
+  // ===== Reader path =====
+  function updateBreadcrumb(articleTitle) {
+    currentArticleTitle = articleTitle || null;
+    let rp = '<span onclick="goToRoot()">知识库</span>';
+    rp += '<span class="rp-sep">›</span>';
+    if (articleTitle) {
+      rp += `<span onclick="goToSection()">${tabNames[currentTab]}</span>`;
+      rp += '<span class="rp-sep">›</span>';
+      rp += `<span class="rp-current">${articleTitle}</span>`;
+    } else {
+      rp += `<span class="rp-current">${tabNames[currentTab]}</span>`;
+    }
+    const rpEl = document.getElementById('reader-path-' + currentTab);
+    if (rpEl) rpEl.innerHTML = rp;
+  }
+
+  function goToRoot() {
+    switchTab('stories');
+  }
+
+  function goToSection() {
+    // Go back to the current tab's list view
+    if (currentTab === 'stories') {
+      document.querySelectorAll('.story-detail').forEach(d => d.classList.remove('active'));
+      document.getElementById('stories-list').style.display = '';
+    } else if (currentTab === 'research') {
+      document.querySelectorAll('.article-detail').forEach(d => d.classList.remove('active'));
+      document.getElementById('research-list').style.display = '';
+    } else if (currentTab === 'activity') {
+      document.querySelectorAll('.article-detail').forEach(d => d.classList.remove('active'));
+      document.getElementById('activity-list').style.display = '';
+    }
+    const entries = entryList.querySelectorAll('.entry');
+    entries.forEach((e, i) => e.classList.toggle('active', i === 0));
+    updateBreadcrumb(null);
+  }
+
+  // ===== Heart / Like =====
+  function toggleLike(key) {
+    const storageKey = 'fbs-like-' + key;
+    const btn = document.getElementById('heart-' + key);
+    const countEl = document.getElementById('heart-count-' + key);
+    const liked = localStorage.getItem(storageKey) === '1';
+    if (liked) {
+      localStorage.removeItem(storageKey);
+      btn.classList.remove('liked');
+      btn.querySelector('svg').setAttribute('fill', 'none');
+      countEl.textContent = '0';
+    } else {
+      localStorage.setItem(storageKey, '1');
+      btn.classList.add('liked');
+      btn.querySelector('svg').setAttribute('fill', 'currentColor');
+      countEl.textContent = '1';
+    }
+  }
+
+  function initLikes() {
+    ['stories', 'research', 'activity', 'about', 'resources', 'help'].forEach(key => {
+      const storageKey = 'fbs-like-' + key;
+      if (localStorage.getItem(storageKey) === '1') {
+        const btn = document.getElementById('heart-' + key);
+        const countEl = document.getElementById('heart-count-' + key);
+        if (btn && countEl) {
+          btn.classList.add('liked');
+          btn.querySelector('svg').setAttribute('fill', 'currentColor');
+          countEl.textContent = '1';
+        }
+      }
+    });
+  }
+
+  // ===== Sidebar entries =====
   function renderEntries(tabKey) {
     const entries = entriesByTab[tabKey];
     entryList.innerHTML = entries.map((e, i) => `
@@ -566,6 +747,8 @@
     entryList.querySelectorAll('.entry').forEach(el => {
       el.classList.toggle('active', el.dataset.action === id);
     });
+    const title = detail.querySelector('.reader-title')?.textContent || '';
+    updateBreadcrumb(title);
   }
 
   function hideArticle(id) {
@@ -573,6 +756,7 @@
     document.getElementById('research-list').style.display = '';
     const entries = entryList.querySelectorAll('.entry');
     entries.forEach((e, i) => e.classList.toggle('active', i === 0));
+    updateBreadcrumb(null);
   }
 
   function showActivity(id) {
@@ -584,6 +768,8 @@
     entryList.querySelectorAll('.entry').forEach(el => {
       el.classList.toggle('active', el.dataset.action === id);
     });
+    const title = detail.querySelector('.reader-title')?.textContent || '';
+    updateBreadcrumb(title);
   }
 
   function hideActivity(id) {
@@ -591,6 +777,7 @@
     document.getElementById('activity-list').style.display = '';
     const entries = entryList.querySelectorAll('.entry');
     entries.forEach((e, i) => e.classList.toggle('active', i === 0));
+    updateBreadcrumb(null);
   }
 
   function switchTab(tabKey) {
@@ -606,6 +793,25 @@
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabKey));
     panes.forEach(p => p.classList.toggle('active', p.dataset.pane === tabKey));
     renderEntries(tabKey);
+    updateBreadcrumb(null);
+    const activePane = document.querySelector('.pane.active');
+    if (activePane) triggerAnimations(activePane);
+  }
+
+  function showPane(paneKey) {
+    currentTab = paneKey;
+    document.querySelectorAll('.story-detail').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.article-detail').forEach(d => d.classList.remove('active'));
+    const storiesList = document.getElementById('stories-list');
+    if (storiesList) storiesList.style.display = '';
+    const researchList = document.getElementById('research-list');
+    if (researchList) researchList.style.display = '';
+    const activityList = document.getElementById('activity-list');
+    if (activityList) activityList.style.display = '';
+    tabs.forEach(t => t.classList.remove('active'));
+    panes.forEach(p => p.classList.toggle('active', p.dataset.pane === paneKey));
+    renderEntries(paneKey);
+    updateBreadcrumb(null);
     const activePane = document.querySelector('.pane.active');
     if (activePane) triggerAnimations(activePane);
   }
@@ -619,6 +825,8 @@
     entryList.querySelectorAll('.entry').forEach(el => {
       el.classList.toggle('active', el.dataset.action === id);
     });
+    const title = detail.querySelector('.reader-title')?.textContent || '';
+    updateBreadcrumb(title);
   }
 
   function hideStory(id) {
@@ -626,20 +834,22 @@
     document.getElementById('stories-list').style.display = '';
     const entries = entryList.querySelectorAll('.entry');
     entries.forEach((e, i) => e.classList.toggle('active', i === 0));
+    updateBreadcrumb(null);
   }
 
   sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
+    sidebar.classList.add('collapsed');
+  });
+  document.getElementById('sidebarExpand').addEventListener('click', () => {
+    sidebar.classList.remove('collapsed');
   });
 
   tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
 
-  document.getElementById('safeAnchor').addEventListener('click', (e) => {
-    e.preventDefault();
-    window.open('tel:4001619995');
-  });
-
+  // ===== Init =====
   renderEntries('stories');
+  updateBreadcrumb(null);
+  initLikes();
 </script>
 
 </body>
