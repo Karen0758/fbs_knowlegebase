@@ -4,8 +4,8 @@
 
 **线上访问**
 
-- 站点：<https://ly.futurebeyondscars.cn/>（GitHub Pages 镜像：<https://karen0758.github.io/knowledgebase/>）
-- 后台：<https://karen0758.github.io/knowledgebase/admin/>
+- 站点：<https://karen0758.github.io/fbs_knowlegebase/>
+- 后台：<https://karen0758.github.io/fbs_knowlegebase/admin/>
 
 本文档的重点不在"内容"本身，而在**这个站点的前端展示和后台管理是怎么搭起来的** —— 一套零服务器、零运维成本、可被任何想做内容站的人复刻的方案。
 
@@ -147,7 +147,7 @@ subtitle: 副标题（英文原标题等）
 ```yaml
 backend:
   name: github
-  repo: Karen0758/knowledgebase
+  repo: Karen0758/fbs_knowlegebase
   branch: main
 
 media_folder: "assets/images"
@@ -288,8 +288,8 @@ fbs_knowlegebase/
 需要 [Hugo Extended](https://gohugo.io/installation/) ≥ 0.161.1。
 
 ```bash
-git clone https://github.com/Karen0758/knowledgebase.git
-cd knowledgebase
+git clone https://github.com/Karen0758/fbs_knowlegebase.git
+cd fbs_knowlegebase
 hugo server -D
 ```
 
