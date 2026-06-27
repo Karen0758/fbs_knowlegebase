@@ -23,6 +23,13 @@ collections:
       - { label: "侧边栏预览文字", name: "preview", widget: "string" }
       - { label: "结语（页面底部签名）", name: "signoff", widget: "string" }
       - { label: "正文", name: "body", widget: "markdown" }
+      - label: "PDF 附件（可选，提供文章末尾下载按钮）"
+        name: "attachment"
+        widget: "file"
+        required: false
+        media_folder: "/static/files"
+        public_folder: "/files"
+      - { label: "附件下载按钮文字（可选，默认为「下载 PDF」）", name: "attachment_label", widget: "string", required: false }
 
   - name: "research"
     label: "研究动态"
@@ -36,6 +43,13 @@ collections:
       - { label: "分类标签（如：研究综述、实用指南）", name: "meta_label", widget: "string" }
       - { label: "副标题", name: "subtitle", widget: "string" }
       - { label: "正文", name: "body", widget: "markdown" }
+      - label: "PDF 附件（可选，提供文章末尾下载按钮）"
+        name: "attachment"
+        widget: "file"
+        required: false
+        media_folder: "/static/files"
+        public_folder: "/files"
+      - { label: "附件下载按钮文字（可选，默认为「下载 PDF」）", name: "attachment_label", widget: "string", required: false }
 
   - name: "activities"
     label: "行动组织"
@@ -49,6 +63,13 @@ collections:
       - { label: "分类标签（如：2024 年活动）", name: "meta_label", widget: "string" }
       - { label: "副标题", name: "subtitle", widget: "string" }
       - { label: "正文", name: "body", widget: "markdown" }
+      - label: "PDF 附件（可选，提供文章末尾下载按钮）"
+        name: "attachment"
+        widget: "file"
+        required: false
+        media_folder: "/static/files"
+        public_folder: "/files"
+      - { label: "附件下载按钮文字（可选，默认为「下载 PDF」）", name: "attachment_label", widget: "string", required: false }
 
   - name: "pages"
     label: "独立页面"

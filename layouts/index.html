@@ -204,6 +204,21 @@
   .reader-body .signoff::before { content: ""; display: inline-block; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; margin-right: 10px; transform: translateY(-2px); }
   .reader-body .signoff-fixed { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line-soft); color: var(--ink-mute); font-size: 14px; letter-spacing: 0.12em; text-align: right; font-family: var(--font-sans); font-weight: 400; }
 
+  /* PDF download button */
+  .reader-body .attachment-download {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin: 28px 0 8px; padding: 12px 18px;
+    background: rgba(122,46,46,0.05); border: 1px solid rgba(122,46,46,0.18);
+    border-radius: 6px; color: var(--accent); text-decoration: none;
+    font-size: 13.5px; letter-spacing: 0.04em; font-weight: 500;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .reader-body .attachment-download:hover {
+    background: rgba(122,46,46,0.1); border-color: rgba(122,46,46,0.32);
+    transform: translateY(-1px);
+  }
+  .reader-body .attachment-download svg { width: 18px; height: 18px; flex-shrink: 0; }
+
   /* Blockquote */
   .reader-body blockquote {
     position: relative; margin: 24px 0; padding: 20px 24px 16px 36px;
@@ -405,6 +420,12 @@
           <div class="reader-subtitle">亲历者故事 {{ printf "%02d" .Weight }}</div>
           <div class="reader-body">
             {{ .Content }}
+            {{ if .Params.attachment }}
+            <a class="attachment-download" href="{{ .Params.attachment }}" target="_blank" rel="noopener" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+              <span>{{ or .Params.attachment_label "下载 PDF" }}</span>
+            </a>
+            {{ end }}
             <div class="signoff">{{ .Params.signoff }}</div>
             <div class="signoff-fixed">Future Beyond Scars</div>
           </div>
@@ -449,6 +470,12 @@
           <div class="reader-subtitle">{{ .Params.subtitle }}</div>
           <div class="reader-body">
             {{ .Content }}
+            {{ if .Params.attachment }}
+            <a class="attachment-download" href="{{ .Params.attachment }}" target="_blank" rel="noopener" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+              <span>{{ or .Params.attachment_label "下载 PDF" }}</span>
+            </a>
+            {{ end }}
             <div class="signoff-fixed">Future Beyond Scars</div>
           </div>
         </div>
@@ -492,6 +519,12 @@
           <div class="reader-subtitle">{{ .Params.subtitle }}</div>
           <div class="reader-body">
             {{ .Content }}
+            {{ if .Params.attachment }}
+            <a class="attachment-download" href="{{ .Params.attachment }}" target="_blank" rel="noopener" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+              <span>{{ or .Params.attachment_label "下载 PDF" }}</span>
+            </a>
+            {{ end }}
             <div class="signoff-fixed">Future Beyond Scars</div>
           </div>
         </div>
